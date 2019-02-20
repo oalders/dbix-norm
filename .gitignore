@@ -1,0 +1,6 @@
+.build
+/DBIx-Norm*
+local/
+*.sw*
+tidyall.ERR
+.tidyall.d/
