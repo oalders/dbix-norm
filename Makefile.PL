@@ -17,12 +17,16 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.006",
   "NAME" => "DBIx::Norm",
   "PREREQ_PM" => {
+    "Moo" => 0,
+    "SQL::Abstract" => 0,
+    "Types::Standard" => 0,
     "strict" => 0,
     "warnings" => 0
   },
   "TEST_REQUIRES" => {
     "ExtUtils::MakeMaker" => 0,
     "File::Spec" => 0,
+    "Test2::V0" => 0,
     "Test::More" => 0
   },
   "VERSION" => "0.001",
@@ -35,7 +39,11 @@ my %WriteMakefileArgs = (
 my %FallbackPrereqs = (
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
+  "Moo" => 0,
+  "SQL::Abstract" => 0,
+  "Test2::V0" => 0,
   "Test::More" => 0,
+  "Types::Standard" => 0,
   "strict" => 0,
   "warnings" => 0
 );

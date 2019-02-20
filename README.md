@@ -6,6 +6,10 @@ DBIx::Norm - Norm is Not an ORM
 
 version 0.001
 
+## to\_sql
+
+    my $stmt = $norm->to_sql( 'select', '*', 'activity_log', { id => { '>' => 100 } });
+
 # AUTHOR
 
 Olaf Alders <olaf@wundercounter.com>
