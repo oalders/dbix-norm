@@ -28,7 +28,7 @@ my %user = (
 is(
     $norm->insert( 'user', \%user )->do,
     1,
-    'insert'
+    'insert first user'
 );
 
 is( $norm->select( '*', 'user' )->select_all, [ \%user ], 'empty set' );
@@ -41,12 +41,22 @@ my %second_user = (
 is(
     $norm->insert( 'user', \%second_user )->do,
     1,
-    'insert'
+    'insert second user'
 );
 
 is(
     $norm->select( '*', 'user', undef, 'first_name ASC' )->select_all,
     [ \%second_user, \%user ], 'empty set'
 );
+
+my $expected = <<'EOF';
+$dbh->do(
+    <<'SQL', {}, 'Peter', 'Hook' );
+INSERT INTO user ( first_name, last_name) VALUES ( ?, ? )
+SQL
+EOF
+
+my $do_as_sql = $norm->insert( 'user', \%second_user )->do_as_sql;
+is( $do_as_sql, $expected, 'do_as_sql' );
 
 done_testing();

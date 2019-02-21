@@ -83,6 +83,23 @@ sub do {
     return $self->dbh->do( $self->sql, undef, @{ $self->bind } );
 }
 
+sub do_as_sql {
+    my $self = shift;
+
+    my $template = <<'EOF';
+$dbh->do(
+    <<'SQL', {}, %s );
+%s
+SQL
+EOF
+
+    return sprintf(
+        $template,
+        join( ', ', map { $self->dbh->quote($_) } @{ $self->bind } ),
+        $self->sql
+    );
+}
+
 sub select_all {
     my $self = shift;
     return $self->dbh->selectall_arrayref(
