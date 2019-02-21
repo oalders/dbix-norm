@@ -4,30 +4,43 @@ package DBIx::Norm;
 
 use Moo;
 
-use SQL::Abstract ();
-use Types::Standard qw( Str );
+use DBIx::Norm::Query ();
+use Types::Standard qw( InstanceOf );
 
 has dbh => (
     is  => 'ro',
-    isa => Str,
+    isa => InstanceOf ['DBI::db'],
 );
 
-=head2 to_sql
-
-    my $stmt = $norm->to_sql( 'select', '*', 'activity_log', { id => { '>' => 100 } });
-
-=cut
-
-sub to_sql {
+sub insert {
     my $self   = shift;
-    my $method = shift;    # select/insert/update/delete
+    my $source = shift;
+    my $values = shift;
+
+    return DBIx::Norm::Query->new(
+        $self->dbh ? ( dbh => $self->dbh ) : (),
+        query_type => 'insert',
+        source     => $source,
+        values     => $values,
+    );
+}
+
+sub select {
+    my $self   = shift;
     my $cols   = shift;
-    my $tables = shift;
-    my $where  = shift || {};
+    my $source = shift;
+    my $where  = shift;
     my $order  = shift;
 
-    my ($stmt, @bind) = SQL::Abstract->new->$method( $tables, $cols, $where, $order );
-    return $stmt, @bind;
+    return DBIx::Norm::Query->new(
+        cols => $cols,
+        $self->dbh ? ( dbh => $self->dbh ) : (),
+        order      => $order,
+        query_type => 'select',
+        source     => $source,
+        where      => $where,
+    );
+
 }
 
 1;

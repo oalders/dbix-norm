@@ -7,11 +7,18 @@ use Test2::V0;
 my $norm = DBIx::Norm->new;
 ok( $norm, 'compiles' );
 
-my ( $sql, @bind ) = $norm->to_sql(
-    'select', '*', 'activity_log',
-    { id => { '>' => 100 } }
+my $query = $norm->select(
+    '*',
+    'user',
+    { id => { '>' => 100 } },
+    'first_name ASC'
 );
-is( $sql, q{SELECT * FROM activity_log WHERE ( id > ? )}, 'SELECT' );
-is( \@bind, [100], 'bind' );
+
+is(
+    $query->sql,
+    q{SELECT * FROM user WHERE ( id > ? ) ORDER BY first_name ASC},
+    'SELECT'
+);
+is( $query->bind, [100], 'bind' );
 
 done_testing();
