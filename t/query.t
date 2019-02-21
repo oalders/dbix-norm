@@ -49,14 +49,30 @@ is(
     [ \%second_user, \%user ], 'empty set'
 );
 
-my $expected = <<'EOF';
+subtest 'do_as_sql' => sub {
+    my $expected = <<'EOF';
 $dbh->do(
     <<'SQL', {}, 'Peter', 'Hook' );
 INSERT INTO user ( first_name, last_name) VALUES ( ?, ? )
 SQL
 EOF
 
-my $do_as_sql = $norm->insert( 'user', \%second_user )->do_as_sql;
-is( $do_as_sql, $expected, 'do_as_sql' );
+    my $do_as_sql = $norm->insert( 'user', \%second_user )->do_as_sql;
+    is( $do_as_sql, $expected, 'do_as_sql' );
+
+    my $literal_bind
+        = $norm->insert( 'user', \%second_user )->do_as_sql( ['@bind'] );
+    my $expected_literal_bind = <<'EOF';
+$dbh->do(
+    <<'SQL', {}, @bind );
+INSERT INTO user ( first_name, last_name) VALUES ( ?, ? )
+SQL
+EOF
+
+    is(
+        $literal_bind, $expected_literal_bind,
+        'do_as_sql with literal bind'
+    );
+};
 
 done_testing();

@@ -1,0 +1,21 @@
+#!perl
+
+use strict;
+use warnings;
+
+use Cpanel::JSON::XS qw( decode_json );
+use DBIx::Norm ();
+
+my $source = shift @ARGV;
+my $cols   = decode_json( shift @ARGV );
+my $query  = DBIx::Norm->new->insert( $source, $cols );
+
+print $query->do_as_sql;
+
+exit(0);
+
+=head1 SYNOPSIS
+
+    perl -Ilib script/insert user '{ "first_name": "Peter" }'
+
+=cut

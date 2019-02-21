@@ -6,8 +6,11 @@ use SQL::Abstract ();
 use Types::Standard qw( ArrayRef InstanceOf Str );
 
 has dbh => (
-    is  => 'ro',
-    isa => InstanceOf ['DBI::db'],
+    is   => 'ro',
+    isa  => InstanceOf ['DBI::db'],
+    lazy => 1,
+    default =>
+        sub { require DBI && DBI->connect('dbi:SQLite:dbname=:memory:') },
 );
 
 has bind => (
@@ -84,7 +87,9 @@ sub do {
 }
 
 sub do_as_sql {
-    my $self = shift;
+    my $self        = shift;
+    my $bind_values = shift
+        || [ join( ', ', map { $self->dbh->quote($_) } @{ $self->bind } ) ];
 
     my $template = <<'EOF';
 $dbh->do(
@@ -93,11 +98,7 @@ $dbh->do(
 SQL
 EOF
 
-    return sprintf(
-        $template,
-        join( ', ', map { $self->dbh->quote($_) } @{ $self->bind } ),
-        $self->sql
-    );
+    return sprintf( $template, @{$bind_values}, $self->sql );
 }
 
 sub select_all {
