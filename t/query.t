@@ -75,4 +75,19 @@ EOF
     );
 };
 
+subtest select_all_as_sql => sub {
+    my $expected = <<'EOF';
+$dbh->selectall_arrayref(
+    <<'SQL', { Slice => {} },  );
+SELECT count(*) FROM log WHERE ( created_at IS NOT NULL )
+SQL
+EOF
+
+    my $query = $norm->select(
+        'count(*)', 'log',
+        { created_at => { '!=' => undef } }
+    );
+    is( $query->select_all_as_sql, $expected, 'query matches' );
+};
+
 done_testing();

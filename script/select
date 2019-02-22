@@ -1,0 +1,30 @@
+#!perl
+
+use strict;
+use warnings;
+
+use Cpanel::JSON::XS qw( decode_json );
+use DBIx::Norm ();
+
+my @cols   = split ',', shift @ARGV;
+my $source = shift @ARGV;
+my $where  = $ARGV[0] ? decode_json( shift @ARGV) : undef;
+
+my $query = DBIx::Norm->new->select( \@cols, $source, $where );
+
+print $query->select_all_as_sql;
+
+exit(0);
+
+=head1 SYNOPSIS
+
+    perl -Ilib script/select 'count(*)' log '{ "created_at": { "!=": null }}'
+
+prints:
+
+    $dbh->selectall_arrayref(
+        <<'SQL', { Slice => {} },  );
+    SELECT count(*) FROM log WHERE ( created_at IS NOT NULL )
+    SQL
+
+=cut

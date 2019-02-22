@@ -109,6 +109,17 @@ sub select_all {
     );
 }
 
+sub select_all_as_sql {
+    my $self     = shift;
+    my $template = <<'EOF';
+$dbh->selectall_arrayref(
+    <<'SQL', { Slice => {} }, %s );
+%s
+SQL
+EOF
+    return sprintf( $template, ( @{ $self->bind } || q{} ), $self->sql );
+}
+
 1;
 
-# ABSTRACT: Norm is Not an ORM
+# ABSTRACT: Norm Query object
