@@ -12,13 +12,13 @@ my $where  = $ARGV[0] ? decode_json( shift @ARGV) : undef;
 
 my $query = DBIx::Norm->new->select( \@cols, $source, $where );
 
-print $query->select_all_as_sql;
+print $query->do_as_sql;
 
 exit(0);
 
 =head1 SYNOPSIS
 
-    perl -Ilib script/select 'count(*)' log '{ "created_at": { "!=": null }}'
+    perl -Ilib script/do 'count(*)' log '{ "created_at": { "!=": null }}'
 
 prints:
 
@@ -29,4 +29,4 @@ prints:
 
 =cut
 
-# PODNAME: select
+# PODNAME: do

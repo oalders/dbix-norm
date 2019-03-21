@@ -1,0 +1,31 @@
+#!perl
+
+use strict;
+use warnings;
+
+use Cpanel::JSON::XS qw( decode_json );
+use DBIx::Norm ();
+
+my $source = shift @ARGV;
+my $fieldvals  = $ARGV[0] ? decode_json( shift @ARGV) : undef;
+
+my $query = DBIx::Norm->new->insert( $source, $fieldvals );
+
+print $query->do_as_sql;
+
+exit(0);
+
+=head1 SYNOPSIS
+
+    perl -Ilib script/insert customer ' { "customer_id" : "11" }'
+
+prints:
+
+    $dbh->do(
+    <<~'SQL', {}, '11' );
+        INSERT INTO customer ( customer_id) VALUES ( ? )
+    SQL
+
+=cut
+
+# PODNAME: insert
