@@ -73,7 +73,6 @@ sub _build_sql_with_bind {
     }
 
     if ( $self->query_type eq 'insert' ) {
-
         my ( $sql, @bind ) = SQL::Abstract->new->insert(
             $self->source, $self->values,
         );
@@ -91,11 +90,11 @@ sub do_as_sql {
     my $bind_values = shift
         || [ join( ', ', map { $self->dbh->quote($_) } @{ $self->bind } ) ];
 
-    my $template = <<'EOF';
+    my $template = <<~'EOF';
 $dbh->do(
-    <<'SQL', {}, %s );
-%s
-SQL
+    <<~'SQL', {}, %s );
+        %s
+    SQL
 EOF
 
     return sprintf( $template, @{$bind_values}, $self->sql );
@@ -111,13 +110,19 @@ sub select_all {
 
 sub select_all_as_sql {
     my $self     = shift;
+
+    # For now, keep it simple.  If more than one columns are returned per row,
+    # return hashrefs.  If it's just one column, no need to return the column
+    # name.
+    my $slice = scalar @{$self->bind} > 1 ? '{ Slice => {} }' : 'undef';
+
     my $template = <<'EOF';
 $dbh->selectall_arrayref(
-    <<'SQL', { Slice => {} }, %s );
-%s
-SQL
+    <<~'SQL', %s, %s );
+        %s
+    SQL
 EOF
-    return sprintf( $template, ( @{ $self->bind } || q{} ), $self->sql );
+    return sprintf( $template, $slice, ( @{ $self->bind } || q{} ), $self->sql );
 }
 
 1;

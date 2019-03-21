@@ -52,9 +52,9 @@ is(
 subtest 'do_as_sql' => sub {
     my $expected = <<'EOF';
 $dbh->do(
-    <<'SQL', {}, 'Peter', 'Hook' );
-INSERT INTO user ( first_name, last_name) VALUES ( ?, ? )
-SQL
+    <<~'SQL', {}, 'Peter', 'Hook' );
+        INSERT INTO user ( first_name, last_name) VALUES ( ?, ? )
+    SQL
 EOF
 
     my $do_as_sql = $norm->insert( 'user', \%second_user )->do_as_sql;
@@ -64,9 +64,9 @@ EOF
         = $norm->insert( 'user', \%second_user )->do_as_sql( ['@bind'] );
     my $expected_literal_bind = <<'EOF';
 $dbh->do(
-    <<'SQL', {}, @bind );
-INSERT INTO user ( first_name, last_name) VALUES ( ?, ? )
-SQL
+    <<~'SQL', {}, @bind );
+        INSERT INTO user ( first_name, last_name) VALUES ( ?, ? )
+    SQL
 EOF
 
     is(
@@ -78,9 +78,9 @@ EOF
 subtest select_all_as_sql => sub {
     my $expected = <<'EOF';
 $dbh->selectall_arrayref(
-    <<'SQL', { Slice => {} },  );
-SELECT count(*) FROM log WHERE ( created_at IS NOT NULL )
-SQL
+    <<~'SQL', undef,  );
+        SELECT count(*) FROM log WHERE ( created_at IS NOT NULL )
+    SQL
 EOF
 
     my $query = $norm->select(
