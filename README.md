@@ -2,13 +2,11 @@
 
 DBIx::Norm - Norm is Not an ORM
 
+[![Build Status](https://travis-ci.org/oalders/dbix-norm.png?branch=master)](https://travis-ci.org/oalders/dbix-norm)
+
 # VERSION
 
-version 0.001
-
-## to\_sql
-
-    my $stmt = $norm->to_sql( 'select', '*', 'activity_log', { id => { '>' => 100 } });
+version 0.000001
 
 # AUTHOR
 

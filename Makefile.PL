@@ -13,10 +13,16 @@ my %WriteMakefileArgs = (
     "ExtUtils::MakeMaker" => 0
   },
   "DISTNAME" => "DBIx-Norm",
+  "EXE_FILES" => [
+    "script/insert",
+    "script/select"
+  ],
   "LICENSE" => "perl",
   "MIN_PERL_VERSION" => "5.006",
   "NAME" => "DBIx::Norm",
   "PREREQ_PM" => {
+    "Cpanel::JSON::XS" => 0,
+    "DBI" => 0,
     "Moo" => 0,
     "SQL::Abstract" => 0,
     "Types::Standard" => 0,
@@ -27,9 +33,10 @@ my %WriteMakefileArgs = (
     "ExtUtils::MakeMaker" => 0,
     "File::Spec" => 0,
     "Test2::V0" => 0,
-    "Test::More" => 0
+    "Test::More" => 0,
+    "Test::Needs" => 0
   },
-  "VERSION" => "0.001",
+  "VERSION" => "0.000001",
   "test" => {
     "TESTS" => "t/*.t"
   }
@@ -37,12 +44,15 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
+  "Cpanel::JSON::XS" => 0,
+  "DBI" => 0,
   "ExtUtils::MakeMaker" => 0,
   "File::Spec" => 0,
   "Moo" => 0,
   "SQL::Abstract" => 0,
   "Test2::V0" => 0,
   "Test::More" => 0,
+  "Test::Needs" => 0,
   "Types::Standard" => 0,
   "strict" => 0,
   "warnings" => 0

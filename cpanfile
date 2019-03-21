@@ -1,3 +1,5 @@
+requires "Cpanel::JSON::XS" => "0";
+requires "DBI" => "0";
 requires "Moo" => "0";
 requires "SQL::Abstract" => "0";
 requires "Types::Standard" => "0";
@@ -10,6 +12,7 @@ on 'test' => sub {
   requires "File::Spec" => "0";
   requires "Test2::V0" => "0";
   requires "Test::More" => "0";
+  requires "Test::Needs" => "0";
   requires "perl" => "5.006";
 };
 
@@ -30,13 +33,11 @@ on 'develop' => sub {
   requires "Parallel::ForkManager" => "1.19";
   requires "Perl::Critic" => "1.132";
   requires "Perl::Tidy" => "20180220";
-  requires "Pod::Coverage::TrustPod" => "0";
   requires "Pod::Wordlist" => "0";
   requires "Test::CPAN::Changes" => "0.19";
   requires "Test::Code::TidyAll" => "0.50";
   requires "Test::More" => "0.96";
   requires "Test::Pod" => "1.41";
-  requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Spelling" => "0.12";
   requires "Test::Synopsis" => "0";
   requires "Test::Vars" => "0.014";
