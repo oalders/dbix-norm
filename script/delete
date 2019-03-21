@@ -1,0 +1,35 @@
+#!perl
+
+use strict;
+use warnings;
+
+use Cpanel::JSON::XS qw( decode_json );
+use DBIx::Norm ();
+use Devel::Confess;
+
+my $source = shift @ARGV;
+my $fieldvals  = $ARGV[0] ? decode_json( shift @ARGV) : undef;
+
+use DDP;
+p $source;
+p $fieldvals;
+
+my $query = DBIx::Norm->new->delete( $source, $fieldvals );
+print $query->do_as_sql;
+
+exit(0);
+
+=head1 SYNOPSIS
+
+    perl -Ilib script/delete customer ' { "customer_id" : "11" }'
+
+prints:
+
+    $dbh->do(
+    <<~'SQL', {}, '11' );
+        DELETE FROM customer ( customer_id) VALUES ( ? )
+    SQL
+
+=cut
+
+# PODNAME: delete

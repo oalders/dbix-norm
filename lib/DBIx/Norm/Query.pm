@@ -72,8 +72,9 @@ sub _build_sql_with_bind {
         return [ $sql, \@bind ];
     }
 
-    if ( $self->query_type eq 'insert' ) {
-        my ( $sql, @bind ) = SQL::Abstract->new->insert(
+    if ( $self->query_type eq 'delete' || $self->query_type eq 'insert' ) {
+        my $method = $self->query_type;
+        my ( $sql, @bind ) = SQL::Abstract->new->$method(
             $self->source, $self->values,
         );
         return [ $sql, \@bind ];

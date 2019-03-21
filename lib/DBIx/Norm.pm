@@ -14,6 +14,19 @@ has dbh => (
     isa => InstanceOf ['DBI::db'],
 );
 
+sub delete {
+    my $self   = shift;
+    my $source = shift;
+    my $values = shift;
+
+    return DBIx::Norm::Query->new(
+        $self->dbh ? ( dbh => $self->dbh ) : (),
+        query_type => 'delete',
+        source     => $source,
+        values     => $values,
+    );
+}
+
 sub insert {
     my $self   = shift;
     my $source = shift;
