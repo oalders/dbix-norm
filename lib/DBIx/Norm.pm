@@ -2,6 +2,8 @@ use strict;
 use warnings;
 package DBIx::Norm;
 
+our $VERSION = '0.000001';
+
 use Moo;
 
 use DBIx::Norm::Query ();

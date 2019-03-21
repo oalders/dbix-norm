@@ -109,12 +109,12 @@ sub select_all {
 }
 
 sub select_all_as_sql {
-    my $self     = shift;
+    my $self = shift;
 
     # For now, keep it simple.  If more than one columns are returned per row,
     # return hashrefs.  If it's just one column, no need to return the column
     # name.
-    my $slice = scalar @{$self->bind} > 1 ? '{ Slice => {} }' : 'undef';
+    my $slice = scalar @{ $self->bind } > 1 ? '{ Slice => {} }' : 'undef';
 
     my $template = <<'EOF';
 $dbh->selectall_arrayref(
@@ -122,7 +122,8 @@ $dbh->selectall_arrayref(
         %s
     SQL
 EOF
-    return sprintf( $template, $slice, ( @{ $self->bind } || q{} ), $self->sql );
+    return
+        sprintf( $template, $slice, ( @{ $self->bind } || q{} ), $self->sql );
 }
 
 1;
