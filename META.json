@@ -53,10 +53,12 @@
          "requires" : {
             "Cpanel::JSON::XS" : "0",
             "DBI" : "0",
+            "DDP" : "0",
+            "Devel::Confess" : "0",
             "Moo" : "0",
             "SQL::Abstract" : "0",
             "Types::Standard" : "0",
-            "perl" : "5.006",
+            "perl" : "5.26",
             "strict" : "0",
             "warnings" : "0"
          }
