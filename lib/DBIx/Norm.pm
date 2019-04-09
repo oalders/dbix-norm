@@ -55,7 +55,21 @@ sub select {
         source     => $source,
         where      => $where,
     );
+}
 
+sub update {
+    my $self   = shift;
+    my $source = shift;
+    my $values = shift;
+    my $where  = shift;
+
+    return DBIx::Norm::Query->new(
+        $self->dbh ? ( dbh => $self->dbh ) : (),
+        query_type => 'update',
+        source     => $source,
+        values     => $values,
+        where      => $where,
+    );
 }
 
 1;

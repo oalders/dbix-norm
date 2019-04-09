@@ -72,6 +72,15 @@ sub _build_sql_with_bind {
         return [ $sql, \@bind ];
     }
 
+    if ( $self->query_type eq 'update' ) {
+
+        my ( $sql, @bind ) = SQL::Abstract->new->update(
+            $self->source, $self->values,
+            $self->where
+        );
+        return [ $sql, \@bind ];
+    }
+
     if ( $self->query_type eq 'delete' || $self->query_type eq 'insert' ) {
         my $method = $self->query_type;
         my ( $sql, @bind ) = SQL::Abstract->new->$method(
@@ -123,8 +132,9 @@ $dbh->selectall_arrayref(
         %s
     SQL
 EOF
-    return
-        sprintf( $template, $slice, ( @{ $self->bind } || q{} ), $self->sql );
+
+    my $bind = join ', ', @{ $self->bind };
+    return sprintf( $template, $slice, $bind, $self->sql );
 }
 
 1;
